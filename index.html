@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>For Yeobo — Read Me</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#071226">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+<div class="wrap">
+  <div class="card" role="article" aria-label="A love and apology message for Yeobo">
+    <div class="header">
+      <div class="avatar">Y</div>
+      <div class="title">
+        <h1>For Yeobo — Read me</h1>
+        <p class="small">Open this when you want to know how much I mean it.</p>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="message" id="typedMessage">
+        <div class="line">Hey… I know things got tangled up between us lately.</div>
+        <div class="line">Maybe I said something wrong, maybe I didn’t hold you the way you needed — and for that I’m sorry.</div>
+        <div class="line">You are not my problem — you are my peace. I want to be the reason you feel lighter, not heavier.</div>
+        <div class="line">I don’t want time to fix this alone. I want us to fix it together.</div>
+        <div class="line">No excuses. Just me, honest: I'm here, ready to listen, to learn, and to love you like you deserve.</div>
+        <div class="line">Be my peace, not my problem — I miss the little things with you.</div>
+        <div class="line">If you smile while reading this, I’ll take it as a tiny victory — because your smile means everything to me. ❤️</div>
+      </div>
+
+      <div class="signature">
+        <div class="signed">— Pawan (Beast)</div>
+        <div class="heart">💗</div>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn btn-primary" id="copyBtn">Copy message</button>
+        <button class="btn btn-ghost" id="waBtn">Send on WhatsApp</button>
+        <a class="btn btn-primary" id="installBtn" href="#" style="display:none">Add to Home Screen</a>
+      </div>
+
+      <div class="preview-chat small" id="preview">Preview will appear here after you press <strong>Send on WhatsApp</strong>.</div>
+
+      <footer>Mobile-friendly • Night-sky • Tap & share</footer>
+    </div>
+  </div>
+</div>
+
+<script>
+// Canvas stars + hearts (gentle night-sky)
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+let W, H, stars = [];
+function resize(){ W = canvas.width = innerWidth; H = canvas.height = innerHeight; initStars(); }
+window.addEventListener('resize', resize);
+function rand(a,b){return Math.random()*(b-a)+a}
+function initStars(){
+  stars = [];
+  const count = Math.min(150, Math.floor((W*H)/5000));
+  for(let i=0;i<count;i++){
+    stars.push({ x:Math.random()*W, y:Math.random()*H, r:rand(0.3,1.6), a:rand(0.02,0.22), vy:rand(0.02,0.35), type: Math.random()<0.06?'heart':'star' });
+  }
+}
+resize();
+function drawHeart(x,y,s,alpha){
+  ctx.save(); ctx.translate(x,y); ctx.scale(s,s); ctx.globalAlpha=alpha;
+  ctx.beginPath(); ctx.moveTo(0,-10); ctx.bezierCurveTo(12,-26,44,-12,0,40); ctx.bezierCurveTo(-44,-12,-12,-26,0,-10); ctx.closePath();
+  ctx.fillStyle='rgba(255,107,129,0.12)'; ctx.fill(); ctx.restore();
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const g = ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#071226'); g.addColorStop(1,'#031024');
+  ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+  for(let s of stars){
+    s.y -= s.vy;
+    if(s.y < -20) s.y = H + 20;
+    if(s.type==='heart'){
+      drawHeart(s.x,s.y, Math.max(0.25, s.r*0.6), 0.12 + Math.sin(Date.now()/600 + s.x)*0.08);
+    } else {
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(255,255,255,${0.06 + s.a * (0.6 + 0.4*Math.sin(Date.now()/800 + s.x))})`;
+      ctx.fill();
+    }
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+// copy & WhatsApp share
+function getMessageText(){ return Array.from(document.querySelectorAll('#typedMessage .line')).map(n=>n.textContent.trim()).join('\n'); }
+const copyBtn = document.getElementById('copyBtn');
+copyBtn.addEventListener('click', async ()=>{ const txt=getMessageText(); try{ await navigator.clipboard.writeText(txt); copyBtn.textContent='Copied ✅'; setTimeout(()=>copyBtn.textContent='Copy message',1600);}catch(e){copyBtn.textContent='Copy failed'}});
+const waBtn = document.getElementById('waBtn'); const preview = document.getElementById('preview');
+waBtn.addEventListener('click', ()=>{ const txt=encodeURIComponent(getMessageText()); preview.innerHTML = '<strong>Preview:</strong><br>' + getMessageText().replace(/\n/g,'<br>'); const url = `https://wa.me/?text=${txt}`; window.open(url,'_blank'); });
+
+// PWA install handling
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e)=>{ e.preventDefault(); deferredPrompt = e; const btn = document.getElementById('installBtn'); btn.style.display='inline-block'; btn.addEventListener('click', async ()=>{ btn.textContent='Installing...'; deferredPrompt.prompt(); const choice = await deferredPrompt.userChoice; btn.style.display='none'; }); });
+
+// show lines with delay for effect (respects reduced-motion)
+if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  document.querySelectorAll('#typedMessage .line').forEach(n=>n.style.opacity=1);
+} else {
+  window.addEventListener('load', ()=>{
+    document.querySelectorAll('#typedMessage .line').forEach((el,i)=>{ el.style.animationDelay = (120 * (i+1)) + 'ms'; });
+  });
+}
+</script>
+
+</body>
+</html>

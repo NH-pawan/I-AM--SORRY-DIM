@@ -1,0 +1,50 @@
+:root{
+  --bg1:#071226; --bg2:#031024; --rose1:#ff6b81; --rose2:#ff8fb3; --muted:#c0cfdd;
+  --card:#ffffff10; --glass:12px;
+  --maxw:820px;
+  --fw-sans: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+}
+*{box-sizing:border-box} html,body{height:100%}
+body{margin:0;font-family:var(--fw-sans);background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--muted);-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;padding:18px;overflow:hidden}
+canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+.wrap{z-index:2;width:100%;max-width:var(--maxw);margin-inline:auto;padding:12px}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:18px;padding:18px;backdrop-filter:blur(var(--glass));box-shadow:0 12px 40px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.04);display:flex;flex-direction:column;gap:12px}
+.header{display:flex;gap:12px;align-items:center}
+.avatar{width:68px;height:68px;border-radius:14px;display:grid;place-items:center;font-weight:700;font-size:22px;color:white;background:linear-gradient(135deg,var(--rose1),var(--rose2));box-shadow:0 8px 30px rgba(255,107,129,0.12)}
+.title h1{margin:0;color:#fff;font-size:18px}
+.small{font-size:13px;color:var(--muted)}
+.content{display:flex;flex-direction:column;gap:12px}
+.message{background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(255,255,255,0.02));border-radius:12px;padding:14px;color:#fbfdff;font-size:15px;line-height:1.45;border:1px solid rgba(255,255,255,0.03)}
+.message .line{opacity:0;transform:translateY(6px);animation:enter 420ms forwards}
+@keyframes enter{to{opacity:1;transform:none}}
+.signature{display:flex;align-items:center;gap:12px;margin-top:6px}
+.heart{font-size:18px;color:var(--rose1)}
+.cta-row{display:flex;gap:10px;align-items:center}
+.btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+.btn-primary{background:linear-gradient(90deg,var(--rose1),var(--rose2));color:#fff}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+
+/* Chat styles */
+.chatbody{align-items:stretch;justify-content:center;padding:0}
+.chat-wrap{z-index:2;width:100%;max-width:420px;margin:36px auto;border-radius:18px;overflow:hidden;box-shadow:0 20px 60px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+.chat-header{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.02);gap:12px}
+.ch-left{display:flex;gap:10px;align-items:center}
+.avatar.small{width:44px;height:44px;border-radius:10px;font-size:16px}
+.name{font-weight:700;color:#fff}
+.sub{font-size:12px;color:var(--muted)}
+.chat-main{padding:14px;display:flex;flex-direction:column;gap:10px;min-height:360px;max-height:68vh;overflow:auto}
+.msg{display:flex;flex-direction:column;gap:6px;max-width:88%}
+.received{align-self:flex-start}
+.sent{align-self:flex-end}
+.bubble{padding:10px 12px;border-radius:14px;line-height:1.35;font-size:15px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+.received .bubble{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));color:var(--muted);border:1px solid rgba(255,255,255,0.03)}
+.sent .bubble{background:linear-gradient(90deg,var(--rose1),var(--rose2));color:#fff;border:1px solid rgba(255,255,255,0.06)}
+.time{font-size:11px;color:rgba(255,255,255,0.5);align-self:flex-end}
+.seen{font-size:13px;color:var(--muted);text-align:right;padding-right:6px}
+
+/* footer */
+footer{font-size:12px;color:#9fb0c8;text-align:center;padding:8px}
+
+/* responsive tweaks */
+@media(min-width:700px){ .wrap{padding:20px} .card{padding:24px} }
+@media (prefers-reduced-motion: reduce){ .message .line{animation:none} }

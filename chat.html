@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Chat — For Yeobo</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#071226">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="chatbody">
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+<div class="chat-wrap">
+  <header class="chat-header">
+    <div class="ch-left"><div class="avatar small">Y</div><div><div class="name">Yeobo</div><div class="sub">Today • 8:23 PM</div></div></div>
+    <div class="ch-right">— Pawan</div>
+  </header>
+
+  <main class="chat-main" id="chatMain" aria-live="polite">
+    <div class="msg received">
+      <div class="bubble">Text me whenever everything gets fixed.</div>
+      <div class="time">8:20 PM</div>
+    </div>
+
+    <div class="msg sent">
+      <div class="bubble">Hey… I know things got tangled up between us lately. Maybe I said something wrong, maybe I didn’t hold you the way you needed — and for that I’m sorry.</div>
+      <div class="time">8:21 PM</div>
+    </div>
+
+    <div class="msg sent">
+      <div class="bubble">You are not my problem — you are my peace. I want to be the reason you feel lighter, not heavier.</div>
+      <div class="time">8:21 PM</div>
+    </div>
+
+    <div class="msg sent">
+      <div class="bubble">I don’t want time to fix this alone. I want us to fix it together.</div>
+      <div class="time">8:22 PM</div>
+    </div>
+
+    <div class="msg received">
+      <div class="bubble">...are you sure?</div>
+      <div class="time">8:22 PM</div>
+    </div>
+
+    <div class="msg sent">
+      <div class="bubble">Be my peace, not my problem — I miss the little things with you. If you smile while reading this, I’ll take it as a tiny victory. ❤️</div>
+      <div class="time">8:23 PM</div>
+    </div>
+
+    <div class="seen">Seen <span>💚</span></div>
+  </main>
+
+  <footer class="chat-footer">
+    <div class="signed">— Pawan (Beast)</div>
+  </footer>
+</div>
+
+<script>
+// reuse simple canvas stars for background
+const canvas = document.getElementById('bgCanvas'); const ctx = canvas.getContext('2d'); let W,H,stars=[];
+function resize(){ W=canvas.width=innerWidth; H=canvas.height=innerHeight; initStars(); }
+window.addEventListener('resize', resize);
+function rand(a,b){return Math.random()*(b-a)+a}
+function initStars(){ stars=[]; const count=Math.min(120,Math.floor((W*H)/6000)); for(let i=0;i<count;i++){ stars.push({x:Math.random()*W,y:Math.random()*H,r:rand(0.3,1.6),vy:rand(0.02,0.4),type:Math.random()<0.06?'heart':'star'});} }
+resize();
+function drawHeart(x,y,s,alpha){ ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.globalAlpha=alpha; ctx.beginPath(); ctx.moveTo(0,-10); ctx.bezierCurveTo(12,-26,44,-12,0,40); ctx.bezierCurveTo(-44,-12,-12,-26,0,-10); ctx.closePath(); ctx.fillStyle='rgba(255,107,129,0.12)'; ctx.fill(); ctx.restore(); }
+function draw(){ ctx.clearRect(0,0,W,H); const g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'#071226'); g.addColorStop(1,'#031024'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H); for(let s of stars){ s.y -= s.vy; if(s.y<-20)s.y=H+20; if(s.type==='heart'){ drawHeart(s.x,s.y, Math.max(0.25, s.r*0.6), 0.12 + Math.sin(Date.now()/600 + s.x)*0.08);} else { ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fillStyle=`rgba(255,255,255,${0.05 + 0.6*s.r*Math.sin(Date.now()/900 + s.x)})`; ctx.fill(); }} requestAnimationFrame(draw); }
+draw();
+</script>
+</body>
+</html>
